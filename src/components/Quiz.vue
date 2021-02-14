@@ -118,8 +118,14 @@ export default {
           ? (this.activePlayer += 1)
           : 0;
       // increment correct and wrong gif numbers
-      this.correctImg = this.correctImg < 10 ? (this.correctImg += 1) : 1;
-      this.wrongImg = this.wrongImg < 8 ? (this.wrongImg += 1) : 1;
+      if (
+        this.submittedAnswer ==
+        this.questions[this.currentQuestion].correct_answer
+      ) {
+        this.correctImg = this.correctImg < 10 ? (this.correctImg += 1) : 1;
+      } else {
+        this.wrongImg = this.wrongImg < 8 ? (this.wrongImg += 1) : 1;
+      }
       this.submittedAnswer = "";
       if (this.currentQuestion < this.questions.length - 1) {
         this.currentQuestion += 1;
