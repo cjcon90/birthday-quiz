@@ -1,28 +1,59 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Welcome v-if="stage == 0" @select-players="nextStage" />
+    <PlayerSelect
+      v-if="stage == 1"
+      :players="players"
+      @new-player="newPlayer"
+      @play-game="nextStage"
+    />
+    <Quiz
+      v-if="stage == 2"
+      :players="players"
+      :playerScores="playerScores"
+      @end-game="endGame"
+    />
+    <EndGame v-if="stage == 3" :playerScores="playerScores" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Welcome from "./components/Welcome.vue";
+import PlayerSelect from "./components/PlayerSelect.vue";
+import Quiz from "./components/Quiz.vue";
+import EndGame from "./components/EndGame.vue";
 
 export default {
-  name: 'App',
+  name: "App",
+  data() {
+    return {
+      stage: 0,
+      players: [],
+      playerScores: {},
+    };
+  },
+  methods: {
+    nextStage() {
+      this.stage = this.stage <= 2 ? (this.stage += 1) : 0;
+    },
+    endGame(scores) {
+      this.playerScores = scores;
+      this.nextStage();
+    },
+    newPlayer(name) {
+      this.players.push(name);
+      this.playerScores[`${name}`] = 0;
+    },
+  },
   components: {
-    HelloWorld
-  }
-}
+    Welcome,
+    PlayerSelect,
+    Quiz,
+    EndGame,
+  },
+};
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import url("https://fonts.googleapis.com/css2?family=Yellowtail&display=swap");
 </style>
